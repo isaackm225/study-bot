@@ -1,0 +1,7 @@
+*.cfg
+*.csv
+Lib
+Include
+*.log
+Scripts
+__pycache__/
