@@ -15,17 +15,9 @@ import time
 
 RESSOURCES = [
     "The Real Python",
-    "Healthline",
     "Medium",
-    "How to Geek",
-    "Network Chuck",
-    "Fireship io",
-    "Kevin Powell",
-    "Web dev simplified",
-    "Python Geeks",
+    "Geeks for Geeks",
     "W3 schools",
-    "tech with tim",
-    "documentation",
     "freecodecamp",
     "javatpoint",
     "tutorialspoint"
@@ -45,25 +37,45 @@ def waitfor_results(driver):
 # meta
 options = webdriver.ChromeOptions()
 #options.add_argument("--enable-features=ReaderMode")
-with webdriver.Chrome(options=options) as driver:
+with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options) as driver:
     waits = WebDriverWait(driver, timeout=10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException,ElementNotSelectableException,NoSuchElementException])
     for ressource in RESSOURCES:
         print(ressource)
         link_list = []
         driver.get(f'https://duckduckgo.com/?')
-        input_field = driver.find_element(By.XPATH, '//input')
+        time.sleep(5)
+        input_field = driver.find_element(By.CLASS_NAME, 'searchbox_input__bEGm3')
         input_field.send_keys(f'{key} {ressource}')
         input_field.send_keys(Keys.ENTER)
         waits.until(waitfor_results)
         first_result = driver.find_element(By.XPATH, '/html/body/div[2]/div[5]/div[3]/div/div[1]/div[5]/div[1]/article/div[1]/div/a')
         link_list.append(first_result)
         first_result.click()
+        ressource_to_links.setdefault(ressource,link_list)
         #Maybe we could make the program look for the reader view of the page
+        #For now just going with per ressources scraping template
+        if "realpython" in str(driver.current_url):
+            article = driver.find_element(By.CLASS_NAME,'article')
 
+        elif "medium" in str(driver.current_url):
+            article = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[2]/div/main/div/div[3]/div/div/article/div/div[2]/section/div/div[2]')
 
+        elif "geeksforgeeks" in str(driver.current_url):
+            article = driver.find_element(By.XPATH, "//*[@id='post-449297']")
+
+        elif "w3schools" in str(driver.current_url):
+            article = driver.find_element(By.XPATH, "//*[@id='main']")
+
+        elif "freecodecamp" in str(driver.current_url):
+            article = driver.find_element(By.XPATH, "//*[@id='site-main']/div/article")
+        
+        elif "tutorialspoint" in str(driver.current_url):
+            article = driver.find_element(By.XPATH, "//*[@id='mainContent']")
+        
+        else:
+            article = driver.find_element(By.TAG_NAME, "body")
 
         #If we land on youtube we cannot scrap text 
-        if "youtube" not in str(driver.title).lower():
         #went with one link inside the list as multiple links are trouble to find => code below is intermittent
         #make note to always go through the tools documentation b4 starting a project
         #waits.until(waitfor_results)
@@ -73,21 +85,8 @@ with webdriver.Chrome(options=options) as driver:
         #third_result = driver.find_element(By.XPATH, '/html/body/div[2]/div[5]/div[3]/div/div[1]/div[5]/div[3]/article/div[1]/div/a')
         #link_list.append(third_result)
         #waits.until(waitfor_results)
-            ressource_to_links.setdefault(ressource,link_list)
         #print(ressource_to_links)
         #print(second_result.text)
         #print(third_result.text)
-            body = driver.find_element(By.TAG_NAME,"body")
-            time.sleep(5)
-            action = ActionChains(driver)
-            action.key_down(Keys.F9)
-            action.key_up(Keys.F9)
-            action.perform()
-            txt = body.text
-            print(txt)
-            tts = gTTS(txt,lang='en')
-            tts.save(f"{key}_{ressource}_{driver.title}.mp3")
-
-        else:
-            pass
-        '''
+        tts = gTTS(article.text,lang='en')
+        tts.save(f"{key}_{ressource}_{driver.title}.mp3")

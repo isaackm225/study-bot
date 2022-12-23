@@ -13,7 +13,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 options = Options()
-options.binary_location=r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+#options.binary_location=r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 with Chrome(service=Service(ChromeDriverManager().install()), options=options) as driver:
     driver.get('https://quotes.toscrape.com/')
     footer = driver.find_element(By.TAG_NAME, "footer")
