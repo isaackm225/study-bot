@@ -58,7 +58,7 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=
             article = driver.find_element(By.CLASS_NAME,'article')
 
         elif "medium" in str(driver.current_url):
-            article = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[2]/div/main/div/div[3]/div/div/article/div/div[2]/section/div/div[2]')
+            article = driver.find_element(By.TAG_NAME, 'article')
 
         elif "geeksforgeeks" in str(driver.current_url):
             article = driver.find_element(By.XPATH, "//*[@id='post-449297']")

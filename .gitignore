@@ -4,4 +4,5 @@ Lib
 Include
 *.log
 Scripts
+*.mp3
 __pycache__/
