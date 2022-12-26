@@ -19,7 +19,6 @@ RESSOURCES = [
     "Geeks for Geeks",
     "W3 schools",
     "freecodecamp",
-    "javatpoint",
     "tutorialspoint"
 ]
 
@@ -40,6 +39,7 @@ options = webdriver.ChromeOptions()
 with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options) as driver:
     waits = WebDriverWait(driver, timeout=10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException,ElementNotSelectableException,NoSuchElementException])
     for ressource in RESSOURCES:
+        article=None
         print(ressource)
         link_list = []
         driver.get(f'https://duckduckgo.com/?')
@@ -61,9 +61,10 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=
             article = driver.find_element(By.TAG_NAME, 'article')
 
         elif "geeksforgeeks" in str(driver.current_url):
-            article = driver.find_element(By.XPATH, "//*[@id='post-449297']")
+            article = driver.find_element(By.TAG_NAME, "article")
 
         elif "w3schools" in str(driver.current_url):
+            print(driver.current_url)
             article = driver.find_element(By.XPATH, "//*[@id='main']")
 
         elif "freecodecamp" in str(driver.current_url):
@@ -73,8 +74,9 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=
             article = driver.find_element(By.XPATH, "//*[@id='mainContent']")
         
         else:
-            article = driver.find_element(By.TAG_NAME, "body")
-
+            pass
+        if article:
+        
         #If we land on youtube we cannot scrap text 
         #went with one link inside the list as multiple links are trouble to find => code below is intermittent
         #make note to always go through the tools documentation b4 starting a project
@@ -88,5 +90,6 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=
         #print(ressource_to_links)
         #print(second_result.text)
         #print(third_result.text)
-        tts = gTTS(article.text,lang='en')
-        tts.save(f"{key}_{ressource}_{driver.title}.mp3")
+            tts = gTTS(article.text,lang='en')
+            tts.save(f"./article/{key.replace(' ', '_')}_{ressource}.mp3")
+        
