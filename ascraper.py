@@ -50,31 +50,49 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=
     #first_link.click()
         if "realpython" in driver.current_url:
             article = driver.find_element(By.CLASS_NAME,'article')
-            print(f"rp article saved")
+            try:
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
+            except:
+                os.mkdir("./srv/")
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
 
         elif "medium" in driver.current_url:
-            article = driver.find_element(By.TAG_NAME, 'article')
-            print(f"medium article saved")
+            article = driver.find_element(By.TAG_NAME, "article")
+            try:
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
+            except:
+                os.mkdir("./srv/")
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
 
         elif "geeksforgeeks" in driver.current_url:
             article = driver.find_element(By.TAG_NAME, "article")
-            print(f"gg article saved")
+            try:
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
+            except:
+                os.mkdir("./srv/")
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
 
         elif "freecodecamp" in driver.current_url:
             article = driver.find_element(By.XPATH, "//*[@id='site-main']/div/article")
-            print(f"fcc article saved")
+            try:
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
+            except:
+                os.mkdir("./srv/")
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
         
         elif "tutorialspoint" in driver.current_url:
             article = driver.find_element(By.CLASS_NAME, "tutorial-content")
-            print(f"tp article saved")
-        
-        else:
-            article = None
-
-        if article:
             try:
-                    tts = gTTS(article.text,lang='en')
-                    tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
+                tts = gTTS(article.text,lang='en')
+                tts.save(f"./srv/{key.replace(' ', '_')}_{ressource}.mp3")
             except:
                 os.mkdir("./srv/")
                 tts = gTTS(article.text,lang='en')
