@@ -24,6 +24,19 @@ web_articles = []
 # taking input
 key = input("Please enter the concept that you would like explore: ")
 
+#f(x)s
+
+def read_article(article):
+    try:
+        print('Not creating new srv/ folder')
+        tts = gTTS(article.text,lang='en')
+        tts.save(f"./srv/{key.replace(' ', '_')}_{title}.mp3")
+    except:
+        print("creating new srv/")
+        os.mkdir("./srv/")
+        tts = gTTS(article.text,lang='en')
+        tts.save(f"./srv/{key.replace(' ', '_')}_{title}.mp3")
+
 # scraping
 options = webdriver.ChromeOptions()
 with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options) as driver:
@@ -56,34 +69,33 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=
         if RESSOURCES_KEYWORDS[0] in driver.current_url:
             article = driver.find_element(By.CLASS_NAME,'article')
             title = RESSOURCES_KEYWORDS[0]
+            print("rp")
 
         elif RESSOURCES_KEYWORDS[1] in driver.current_url:
             article = driver.find_element(By.TAG_NAME, "article")
             title = RESSOURCES_KEYWORDS[1]
+            print("m")
 
         elif RESSOURCES_KEYWORDS[2] in driver.current_url:
             article = driver.find_element(By.TAG_NAME, "article")
             title = RESSOURCES_KEYWORDS[2]
+            print("gg")
 
         elif RESSOURCES_KEYWORDS[3] in driver.current_url:
             article = driver.find_element(By.XPATH, "//*[@id='site-main']/div/article")
             title = RESSOURCES_KEYWORDS[3]
+            print("fc")
 
         elif RESSOURCES_KEYWORDS[4] in driver.current_url:
             article = driver.find_element(By.CLASS_NAME, "tutorial-content")
             title = RESSOURCES_KEYWORDS[4]
+            print("tp")
 
 
         else:
-            article = None # most likely means bot is on ddg tab
+            article = None
+            print("ddg")
 
         if article:
-            try:
-                print('Not creating new srv/ folder')
-                tts = gTTS(article.text,lang='en')
-                tts.save(f"./srv/{key.replace(' ', '_')}_{title}.mp3")
-            except:
-                print("creating new srv/")
-                os.mkdir("./srv/")
-                tts = gTTS(article.text,lang='en')
-                tts.save(f"./srv/{key.replace(' ', '_')}_{title}.mp3")
+            print(article.text)
+            read_article(article)
