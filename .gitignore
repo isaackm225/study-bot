@@ -6,3 +6,5 @@ Include
 Scripts
 *.mp3
 __pycache__/
+srv/
+*.bkp
